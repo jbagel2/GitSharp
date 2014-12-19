@@ -236,7 +236,7 @@ namespace GitSharp.Core.Transport
 		public void Update(Config rc)
 		{
 			if (rc == null)
-				throw new ArgumentNullException ("rc");
+				throw new ArgumentNullException ("Cannot perform Remote Config Update with null config argument.");
 			var vlst = new List<string>();
 
 			vlst.Clear();
