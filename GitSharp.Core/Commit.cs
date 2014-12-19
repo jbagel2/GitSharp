@@ -252,6 +252,18 @@ namespace GitSharp.Core
 
             res = _raw.ReadLine(res.NextIndex);
 
+			const string mergetagPrefix = "mergetag ";
+if (res.Buffer != null && res.Buffer.StartsWith(mergetagPrefix.getBytes()))
+{
+byte[] rawMergetag = ExtractTrailingBytes(res.Buffer, mergetagPrefix);
+do
+res = _raw.ReadLine(res.NextIndex);
+while (res.NextIndex < _raw.Length && res.Buffer != null && res.Buffer.Length > 0 && res.Buffer[0] == ' ');
+}
+else if (res.Buffer == null || res.Buffer.Length != 0)
+{
+throw new CorruptObjectException(CommitId, "malformed header:" + new ASCIIEncoding().GetString(res.Buffer ?? new byte[0]));
+}			
             const string encodingPrefix = "encoding ";
             if (res.Buffer != null && res.Buffer.StartsWith(encodingPrefix.getBytes()))
             {

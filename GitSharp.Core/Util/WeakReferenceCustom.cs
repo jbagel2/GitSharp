@@ -42,14 +42,14 @@ using System.Text;
 
 namespace GitSharp.Core.Util
 {
-    public class WeakReference<T> : System.WeakReference
+    public class WeakReferenceCustom<T> : System.WeakReference
     {
-        public WeakReference(T target)
+        public WeakReferenceCustom(T target)
             : base(target)
         {
 
         }
-        public WeakReference(T target, bool trackResurrection)
+        public WeakReferenceCustom(T target, bool trackResurrection)
             : base(target, trackResurrection)
         {
 

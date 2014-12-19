@@ -46,7 +46,7 @@ namespace GitSharp.Core
     {
         private const int CacheSize = 1024;
 
-        private static readonly WeakReference<Entry> Dead;
+        private static readonly WeakReferenceCustom<Entry> Dead;
         private static int _maxByteCount;
         private static readonly Slot[] Cache;
         private static Slot _lruHead;
@@ -62,7 +62,7 @@ namespace GitSharp.Core
 
         static UnpackedObjectCache()
         {
-            Dead = new WeakReference<Entry>(null);
+            Dead = new WeakReferenceCustom<Entry>(null);
             _maxByteCount = new WindowCacheConfig().DeltaBaseCacheLimit;
 
             Cache = new Slot[CacheSize];
@@ -124,7 +124,7 @@ namespace GitSharp.Core
 	            e.provider = pack;
 	            e.position = position;
 	            e.sz = data.Length;
-	            e.data = new WeakReference<Entry>(new Entry(data, objectType));
+	            e.data = new WeakReferenceCustom<Entry>(new Entry(data, objectType));
 	            MoveToHead(e);
 			}
         }
@@ -234,7 +234,7 @@ namespace GitSharp.Core
 
             public int sz;
 
-            public WeakReference<Entry> data = Dead;
+            public WeakReferenceCustom<Entry> data = Dead;
 			
 			public void Dispose ()
 			{

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("The Git Development Community")]
 [assembly: AssemblyCopyright("Copyright © 2009 The GitSharp Team")]
+
 [assembly: ComVisible(false)]
 
 #if DEBUG

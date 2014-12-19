@@ -1,4 +1,4 @@
-Git# is Copyright (C) 2007-2009 by the Git Development Community
+Git# is Copyright (C) 2007-20013 by the Git Development Community
 See source file headers for specific contributor copyrights
 
 All rights reserved.

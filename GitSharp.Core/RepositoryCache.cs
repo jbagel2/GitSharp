@@ -82,12 +82,12 @@ namespace GitSharp.Core
             Cache.clearAll();
         }
 
-        private readonly Dictionary<Key, WeakReference<Repository>> cacheMap;
+        private readonly Dictionary<Key, WeakReferenceCustom<Repository>> cacheMap;
         private readonly Lock[] openLocks;
 
         public RepositoryCache()
         {
-            cacheMap = new Dictionary<Key, WeakReference<Repository>>();
+            cacheMap = new Dictionary<Key, WeakReferenceCustom<Repository>>();
             openLocks = new Lock[4];
             for (int i = 0; i < openLocks.Length; i++)
                 openLocks[i] = new Lock();
@@ -95,7 +95,7 @@ namespace GitSharp.Core
 
         private Repository openRepository(Key location, bool mustExist)
         {
-            WeakReference<Repository> @ref = cacheMap.GetValue(location);
+            WeakReferenceCustom<Repository> @ref = cacheMap.GetValue(location);
             Repository db = @ref != null ? @ref.get() : null;
 
             if (db == null)
@@ -107,7 +107,7 @@ namespace GitSharp.Core
                     if (db == null)
                     {
                         db = location.open(mustExist);
-                        @ref = new WeakReference<Repository>(db);
+                        @ref = new WeakReferenceCustom<Repository>(db);
                         cacheMap.AddOrReplace(location, @ref);
                     }
                 }
@@ -120,8 +120,8 @@ namespace GitSharp.Core
         private void registerRepository(Key location, Repository db)
         {
             db.IncrementOpen();
-            WeakReference<Repository> newRef = new WeakReference<Repository>(db);
-            WeakReference<Repository> oldRef = cacheMap.put(location, newRef);
+            WeakReferenceCustom<Repository> newRef = new WeakReferenceCustom<Repository>(db);
+            WeakReferenceCustom<Repository> oldRef = cacheMap.put(location, newRef);
             Repository oldDb = oldRef != null ? oldRef.get() : null;
             if (oldDb != null)
                 oldDb.Dispose();
@@ -130,7 +130,7 @@ namespace GitSharp.Core
 
         private void unregisterRepository(Key location)
         {
-            WeakReference<Repository> oldRef = cacheMap.GetValue(location);
+            WeakReferenceCustom<Repository> oldRef = cacheMap.GetValue(location);
             cacheMap.Remove(location);
             Repository oldDb = oldRef != null ? oldRef.get() : null;
             if (oldDb != null)
@@ -143,7 +143,7 @@ namespace GitSharp.Core
             {
                 var keysToRemove = new List<Key>();
 
-                foreach (KeyValuePair<Key, WeakReference<Repository>> e in cacheMap)
+                foreach (KeyValuePair<Key, WeakReferenceCustom<Repository>> e in cacheMap)
                 {
                     Repository db = e.Value.get();
                     if (db != null)
